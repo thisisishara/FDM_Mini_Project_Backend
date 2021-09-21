@@ -1,4 +1,5 @@
 from flask import Flask, render_template, jsonify, request
+import association_rules_finder
 import classification_logistic_reg_model as lrm
 import classification_linear_svm_model as lsm
 import classification_random_forest_model as rfm
@@ -10,7 +11,15 @@ app = Flask(__name__)
 
 @app.route("/MLService/association", methods=['GET', 'POST'])
 def associationRuleMine():
-    pass
+    req_data = request.json
+    result = []
+    if req_data["ALGO"] == 'FPG':
+        movi_list = req_data["MOVI_LIST"]
+        result = association_rules_finder.get_rules_fp(movi_list)
+    elif req_data["ALGO"]=='APR':
+        movi_list = req_data["MOVI_LIST"]
+        result = association_rules_finder.get_rules_ap(movi_list)
+    return(jsonify({'MOVIES': str(result)}))
 
 
 @app.route("/MLService/classification", methods=['GET', 'POST'])
