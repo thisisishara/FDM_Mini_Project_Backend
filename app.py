@@ -6,12 +6,14 @@ import classification_random_forest_model as rfm
 import classification_perceptron_model as pm
 import classification_decision_tr_model as dtr
 import re
+from flask_cors import cross_origin
 
 
 app = Flask(__name__)
 
 
 @app.route("/MLService/association", methods=['GET', 'POST'])
+@cross_origin(headers=['Content-Type'])
 def associationRuleMine():
     req_data = request.json
     result = []
@@ -28,6 +30,7 @@ def associationRuleMine():
 
 
 @app.route("/MLService/classification", methods=['GET', 'POST'])
+@cross_origin(headers=['Content-Type'])
 def classify():
     req_data = request.json
     if req_data['ALGO'] == 'Logistic Regression with OneVsRest and TF-IDF':
